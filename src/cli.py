@@ -1,8 +1,7 @@
 """
 Command Line Interface for Calculator
-Example: python -m src.cli add 5 3
+Example: python src/cli.py add 5 3
 """
-
 import sys
 import click
 from src.calculator import add, subtract, multiply, divide, power, square_root
@@ -14,7 +13,6 @@ from src.calculator import add, subtract, multiply, divide, power, square_root
 @click.argument("num2", type=float, required=False)
 def calculate(operation, num1, num2=None):
     """Simple calculator CLI"""
-
     try:
         if operation == "add":
             result = add(num1, num2)
@@ -26,7 +24,7 @@ def calculate(operation, num1, num2=None):
             result = divide(num1, num2)
         elif operation == "power":
             result = power(num1, num2)
-        elif operation == "square_root":
+        elif operation in ("square_root", "sqrt"):
             result = square_root(num1)
         else:
             click.echo(f"Unknown operation: {operation}")
@@ -41,10 +39,13 @@ def calculate(operation, num1, num2=None):
     except ValueError as e:
         click.echo(f"Error: {e}")
         sys.exit(1)
-    except Exception as e:
+    except ZeroDivisionError:
+        click.echo("Error: Cannot divide by zero")
+        sys.exit(1)
+    except Exception as e:  # pylint: disable=broad-exception-caught
         click.echo(f"Unexpected error: {e}")
         sys.exit(1)
 
 
 if __name__ == "__main__":
-    calculate()
+    calculate()  # pylint: disable=no-value-for-parameter
