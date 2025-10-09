@@ -5,6 +5,9 @@ Integration Tests - CLI + Calculator Working Together
 import subprocess
 import sys
 import pytest
+import sys
+import click
+from src.calculator import add, subtract, multiply, divide, power, square_root
 
 
 class TestCLIIntegration:
@@ -12,7 +15,8 @@ class TestCLIIntegration:
 
     def run_cli(self, *args):
         """Helper method to run CLI and capture output"""
-        cmd = [sys.executable, "src/cli.py"] + list(args)
+        cmd = [sys.executable, "-m", "src.cli"] + list(args)
+
         result = subprocess.run(cmd, capture_output=True, text=True, cwd=".")
         return result
 
@@ -35,6 +39,7 @@ class TestCLIIntegration:
         assert result.returncode == 1
         # CLI prints a generic unexpected error message for this case
         assert result.stdout.strip().startswith("Unexpected error:")
+
     def test_cli_multiply_integration(self):
         """Test CLI can perform multiplication"""
         result = self.run_cli("multiply", "5", "3")
@@ -45,4 +50,4 @@ class TestCLIIntegration:
         """Test CLI can perform division"""
         result = self.run_cli("divide", "5", "3")
         assert result.returncode == 0
-        assert result.stdout.strip() == "1.67" 
+        assert result.stdout.strip() == "1.67"
