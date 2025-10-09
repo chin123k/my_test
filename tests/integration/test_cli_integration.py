@@ -44,6 +44,36 @@ class TestCLIIntegration:
         assert res.exit_code == 1
         assert "Unknown operation" in res.output
 
+    def test_cli_subtract_integration(self):
+        """Test subtract operation"""
+        res = self.run_cli("subtract", "10", "3")
+        assert res.exit_code == 0
+        assert res.output.strip() == "7"
+
+    def test_cli_power_integration(self):
+        """Test power operation"""
+        res = self.run_cli("power", "2", "3")
+        assert res.exit_code == 0
+        assert res.output.strip() == "8"
+
+    def test_cli_square_root_full_name(self):
+        """Test square_root operation with full name"""
+        res = self.run_cli("square_root", "25")
+        assert res.exit_code == 0
+        assert res.output.strip() == "5"
+
+    def test_cli_decimal_result(self):
+        """Test operation with decimal result"""
+        res = self.run_cli("divide", "10", "3")
+        assert res.exit_code == 0
+        assert "3.33" in res.output
+
+    def test_cli_negative_sqrt_error(self):
+        """Test square root of negative number"""
+        res = self.run_cli("sqrt", "-4")
+        assert res.exit_code == 1
+        assert "Error:" in res.output
+
 
 class TestCalculatorModuleIntegration:
     """Test calculator module functions work together"""
